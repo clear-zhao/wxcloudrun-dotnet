@@ -18,7 +18,7 @@ WORKDIR /app
 COPY --from=build /app/aspnetapp/out ./
 
 # 暴露端口（默认 ASP.NET Core 监听 8080）
-EXPOSE 80
+EXPOSE 8080
 
 # 启动
 ENTRYPOINT ["dotnet", "aspnetapp.dll"]
