@@ -2,16 +2,17 @@ using aspnetapp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 添加控制器（Web API）和 Razor 页面支持
+// ✅ 必须显式添加控制器支持
 builder.Services.AddControllers();
+
+// ✅ 你的 Razor 页面也要保留
 builder.Services.AddRazorPages();
 
-// 注册数据库上下文
+// ✅ 注册数据库上下文（例如使用 Pomelo）
 builder.Services.AddDbContext<AppDbContext>();
 
 var app = builder.Build();
 
-// 配置 HTTP 请求管道
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -22,8 +23,10 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-// 映射控制器和页面
+// ✅ 映射控制器（Web API）
 app.MapControllers();
+
+// ✅ 映射 Razor 页面
 app.MapRazorPages();
 
 app.Run();
