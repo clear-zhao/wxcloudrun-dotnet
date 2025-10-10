@@ -17,6 +17,7 @@ namespace aspnetapp
         // 两个表
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Account> Accounts { get; set; } = null!;
+        public DbSet<Order> Orders { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -40,6 +41,7 @@ namespace aspnetapp
             // 映射到数据库表
             modelBuilder.Entity<Employee>().ToTable("Employees");
             modelBuilder.Entity<Account>().ToTable("Accounts");
+            modelBuilder.Entity<Order>().ToTable("Orders");
 
             OnModelCreatingPartial(modelBuilder);
         }
