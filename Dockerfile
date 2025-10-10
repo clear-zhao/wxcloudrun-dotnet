@@ -1,46 +1,42 @@
-# 使用 .NET 9 SDK 构建镜像（官方 Debian 版，兼容性好）
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+# 使用 .NET 8 SDK 构建阶段镜像
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
 
-# 如果你希望使用 Alpine 版本（体积更小但不太兼容），可以换成：
-# FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine
-
-# 镜像源加速（如果使用 alpine）
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories || true
+# 使用腾讯源加速 apk 下载
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories
 
 WORKDIR /source
 
-# 拷贝解决方案和项目文件
+# 先复制解决方案和项目文件
 COPY *.sln .
 COPY aspnetapp/*.csproj ./aspnetapp/
 
-# 先还原依赖
-RUN dotnet restore -r linux-x64 /p:PublishReadyToRun=true
+# 还原依赖
+RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
-# 拷贝项目源代码
+# 复制全部源代码并发布
 COPY aspnetapp/. ./aspnetapp/
 WORKDIR /source/aspnetapp
+RUN dotnet publish -c Release -o /app -r linux-musl-x64 \
+    --self-contained true --no-restore \
+    /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
-# 发布应用（单文件自包含）
-RUN dotnet publish -c Release -o /app -r linux-x64 --self-contained true --no-restore /p:PublishTrimmed=true /p:PublishSingleFile=true
+# ===========================
+# 运行阶段镜像
+# ===========================
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-alpine
 
-# ---------------------------
-# 运行阶段
-# ---------------------------
-FROM mcr.microsoft.com/dotnet/runtime-deps:9.0
-
-# 时区（可选：使用上海时间）
-# RUN apt-get update && apt-get install -y tzdata && \
-#     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-#     echo "Asia/Shanghai" > /etc/timezone
-
-# 安装 HTTPS 证书
-RUN apt-get update && apt-get install -y ca-certificates
+# 设置时区为上海
+RUN apk add --no-cache tzdata ca-certificates \
+    && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
 
 WORKDIR /app
-COPY --from=build /app ./
 
-# 如果需要支持多语言（如中文排序、拼音等）
-# ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
-# RUN apt-get install -y libicu-dev
+# 拷贝发布输出
+COPY --from=build /app .
 
+# 挂载 DataProtection 密钥目录（可选）
+VOLUME /root/.aspnet/DataProtection-Keys
+
+# 启动应用
 ENTRYPOINT ["./aspnetapp"]
