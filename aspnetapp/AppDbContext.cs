@@ -18,6 +18,9 @@ namespace aspnetapp
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<Account> Accounts { get; set; } = null!;
         public DbSet<Order> Orders { get; set; } = null!;
+        public DbSet<KYS> KYS { get; set; } = null!;
+        public DbSet<MYS> MYS { get; set; } = null!;
+        public DbSet<DZXH> DZXH { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -42,6 +45,9 @@ namespace aspnetapp
             modelBuilder.Entity<Employee>().ToTable("Employees");
             modelBuilder.Entity<Account>().ToTable("Accounts");
             modelBuilder.Entity<Order>().ToTable("Orders");
+            modelBuilder.Entity<KYS>().ToTable("KYS");
+            modelBuilder.Entity<MYS>().ToTable("MYS");
+            modelBuilder.Entity<DZXH>().ToTable("DZXH").HasNoKey();
 
             OnModelCreatingPartial(modelBuilder);
         }
