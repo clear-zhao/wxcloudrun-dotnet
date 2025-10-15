@@ -156,4 +156,51 @@ namespace aspnetapp.Controllers
         }
     }
 
+        // 物料库的Controller
+    [Route("api/materials")]
+    [ApiController]
+    public class MaterialController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public MaterialController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/materials/KYS
+        /// <summary>
+        /// 获取坑压式物料列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("KYS")]
+        public async Task<ActionResult<IEnumerable<KYS>>> GetKYSMaterials()
+        {
+            return await _context.KYS.ToListAsync();
+        }
+
+        // GET: api/materials/MYS
+        /// <summary>
+        /// 获取模压式物料列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("MYS")]
+        public async Task<ActionResult<IEnumerable<MYS>>> GetMYSMaterials()
+        {
+            return await _context.MYS.ToListAsync();
+        }
+
+        // GET: api/materials/DZXH
+        /// <summary>
+        /// 获取端子型号物料列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("DZXH")]
+        public async Task<ActionResult<IEnumerable<DZXH>>> GetDZXHMaterials()
+        {
+            return await _context.DZXH.ToListAsync();
+        }
+    }
+
+
 }
