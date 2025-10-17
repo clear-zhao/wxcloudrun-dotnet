@@ -39,6 +39,70 @@ namespace aspnetapp.Controllers
 
             return employee;
         }
+
+        // GET: api/employees/{name}/name
+        [HttpGet("serialNumber/{name}")]
+        public async Task<ActionResult<int>> GetEmployeeNameByName(string name)
+        {
+            // 查找指定员工的流水号
+            var employee = await _context.Employees
+                                            .Where(e => e.Name == name)
+                                            .FirstOrDefaultAsync();  // 获取单个结果（无结果时返回null）
+
+            if (employee == null)
+            {
+                return NotFound($"未找到{name}"); // 员工不存在时返回404
+            }
+
+            return employee.SerialNumber;
+        }
+
+        // PUT: api/employees/name/{name}/increment-serial
+        [HttpPut("increment-serial/{name}")]
+        public async Task<IActionResult> IncrementSerialByName(string name)
+        {
+            // 1. 根据姓名查询员工（可能存在多个，用ToListAsync获取所有匹配项）
+            var employees = await _context.Employees
+                                         .Where(e => e.Name == name) // 按姓名筛选
+                                         .ToListAsync();
+
+            // 2. 处理无匹配员工的情况
+            if (!employees.Any())
+            {
+                return NotFound($"未找到姓名为 {name} 的员工");
+            }
+
+            // 3. 处理重名情况（若存在多个同名员工，返回错误）
+            if (employees.Count > 1)
+            {
+                return BadRequest($"存在多个姓名为 {name} 的员工，请使用ID操作以避免错误");
+            }
+
+            // 4. 获取唯一匹配的员工，执行流水号自增
+            var employee = employees.First();
+            employee.SerialNumber += 1;
+
+            try
+            {
+                // 5. 保存修改到数据库
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                // 6. 并发处理：再次验证员工是否仍存在（避免修改过程中被删除）
+                if (!_context.Employees.Any(e => e.ID == employee.ID))
+                {
+                    return NotFound($"姓名为 {name} 的员工已被删除");
+                }
+                else
+                {
+                    throw; // 其他并发错误向上抛出
+                }
+            }
+
+            // 7. 成功返回无内容状态
+            return NoContent();
+        }
     }
 
     [Route("api/accounts")]
