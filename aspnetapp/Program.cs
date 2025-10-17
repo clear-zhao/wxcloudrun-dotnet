@@ -11,6 +11,9 @@ builder.Services.AddRazorPages();
 // ✅ 注册数据库上下文（例如使用 Pomelo）
 builder.Services.AddDbContext<AppDbContext>();
 
+// ✅ 在这里注册后台定时任务服务
+builder.Services.AddHostedService<DailyJobService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
