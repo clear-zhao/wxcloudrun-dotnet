@@ -10,7 +10,7 @@ RUN dotnet restore ./aspnetapp/aspnetapp.csproj
 # 复制源代码并编译发布
 COPY aspnetapp/. ./aspnetapp/
 WORKDIR /app/aspnetapp
-RUN dotnet publish -c Release -o out
+RUN dotnet publish -c Release -o out --verbosity detailed
 
 # 使用 .NET 8 运行时运行
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
