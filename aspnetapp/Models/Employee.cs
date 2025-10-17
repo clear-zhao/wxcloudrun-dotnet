@@ -6,8 +6,10 @@ namespace aspnetapp
         public string Name { get; set; } = null!;
         public int Jurisdiction { get; set; } // 权限
         public string Identity {get;set; } // 身份
+        public int SerialNumber {get;set;} // 单日流水号
     }
 
 }
+
 
 
