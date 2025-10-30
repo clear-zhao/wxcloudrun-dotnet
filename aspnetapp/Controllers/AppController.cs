@@ -266,5 +266,76 @@ namespace aspnetapp.Controllers
         }
     }
 
+        // 测试Controller
+    [Route("api/test")]
+    [ApiController]
+    public class TestController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public TestController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        // 获取全部记录
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Test>>> GetAll()
+        {
+            return await _context.Test.ToListAsync();
+        }
+
+        // 根据订单号获取
+        [HttpGet("{orderId}")]
+        public async Task<ActionResult<Test>> GetById(string orderId)
+        {
+            var item = await _context.Test
+                    .Where(t => t.OrderID == orderId)
+                    .FirstOrDefaultAsync(); // 正确方式
+
+            if (item == null)
+                return NotFound();
+
+            return Ok(item);
+        }
+
+        // 新增记录
+        [HttpPost]
+        public async Task<ActionResult<Test>> Create(Test item)
+        {
+            _context.Test.Add(item);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetById), new { orderId = item.OrderID }, item);
+        }
+
+        // 更新记录
+        [HttpPut("{orderId}")]
+        public async Task<IActionResult> Update(string orderId, Test item)
+        {
+            if (orderId != item.OrderID)
+                return BadRequest();
+
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // 删除记录
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> Delete(string orderId)
+        {
+            var item = await _context.Test.FindAsync(orderId);
+            if (item == null)
+                return NotFound();
+
+            _context.Test.Remove(item);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+
+    }
+
+
 
 }
