@@ -21,6 +21,7 @@ namespace aspnetapp
         public DbSet<KYS> KYS { get; set; } = null!;
         public DbSet<MYS> MYS { get; set; } = null!;
         public DbSet<DZXH> DZXH { get; set; } = null!;
+        public DbSet<Test> Test { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +49,7 @@ namespace aspnetapp
             modelBuilder.Entity<KYS>().ToTable("KYS");
             modelBuilder.Entity<MYS>().ToTable("MYS");
             modelBuilder.Entity<DZXH>().ToTable("DZXH").HasNoKey();
+            modelBuilder.Entity<Test>().ToTable("TestList").HasNoKey();
 
             OnModelCreatingPartial(modelBuilder);
         }
