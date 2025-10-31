@@ -309,10 +309,10 @@ namespace aspnetapp.Controllers
         }
 
         // 更新记录
-        [HttpPut("{orderId}")]
-        public async Task<IActionResult> Update(string orderId, Test item)
+        [HttpPut("{ID}")]
+        public async Task<IActionResult> Update(string ID, Test item)
         {
-            if (orderId != item.OrderID)
+            if (ID != item.ID)
                 return BadRequest();
 
             _context.Entry(item).State = EntityState.Modified;
@@ -321,10 +321,10 @@ namespace aspnetapp.Controllers
         }
 
         // 删除记录
-        [HttpDelete("{orderId}")]
-        public async Task<IActionResult> Delete(string orderId)
+        [HttpDelete("{ID}")]
+        public async Task<IActionResult> Delete(string ID)
         {
-            var item = await _context.Test.FindAsync(orderId);
+            var item = await _context.Test.FindAsync(ID);
             if (item == null)
                 return NotFound();
 
