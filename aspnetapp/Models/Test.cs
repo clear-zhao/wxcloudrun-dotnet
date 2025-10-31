@@ -1,10 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace aspnetapp
 {
-    [Keyless]
     public class Test
     {
+        public int ID {get;set;}                     // 自增ID
         public string OrderID { get; set; }          // 订单编号（主键）
 
         public bool IsFirst { get; set; }            // 是否为首件
