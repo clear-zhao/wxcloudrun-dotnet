@@ -49,7 +49,7 @@ namespace aspnetapp
             modelBuilder.Entity<KYS>().ToTable("KYS");
             modelBuilder.Entity<MYS>().ToTable("MYS");
             modelBuilder.Entity<DZXH>().ToTable("DZXH").HasNoKey();
-            modelBuilder.Entity<Test>().ToTable("TestList").HasNoKey();
+            modelBuilder.Entity<Test>().ToTable("TestList");
 
             OnModelCreatingPartial(modelBuilder);
         }
