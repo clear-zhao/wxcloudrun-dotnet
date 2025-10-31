@@ -310,7 +310,7 @@ namespace aspnetapp.Controllers
 
         // 更新记录
         [HttpPut("{ID}")]
-        public async Task<IActionResult> Update(string ID, Test item)
+        public async Task<IActionResult> Update(int ID, Test item)
         {
             if (ID != item.ID)
                 return BadRequest();
@@ -322,7 +322,7 @@ namespace aspnetapp.Controllers
 
         // 删除记录
         [HttpDelete("{ID}")]
-        public async Task<IActionResult> Delete(string ID)
+        public async Task<IActionResult> Delete(int ID)
         {
             var item = await _context.Test.FindAsync(ID);
             if (item == null)
