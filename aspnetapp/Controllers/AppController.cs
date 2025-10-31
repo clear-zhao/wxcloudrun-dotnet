@@ -287,17 +287,18 @@ namespace aspnetapp.Controllers
 
         // 根据订单号获取
         [HttpGet("{orderId}")]
-        public async Task<ActionResult<Test>> GetById(string orderId)
+        public async Task<ActionResult<List<Test>>> GetById(string orderId)
         {
-            var item = await _context.Test
-                    .Where(t => t.OrderID == orderId)
-                    .FirstOrDefaultAsync(); // 正确方式
-
-            if (item == null)
+            var items = await _context.Test
+                .Where(t => t.OrderID == orderId)
+                .ToListAsync();
+        
+            if (items == null || items.Count == 0)
                 return NotFound();
-
-            return Ok(item);
+        
+            return Ok(items);
         }
+
 
         // 新增记录
         [HttpPost]
