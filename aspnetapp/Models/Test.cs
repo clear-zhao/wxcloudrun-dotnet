@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 namespace aspnetapp
 {
     public class Test
     {
+        [key]
         public int ID {get;set;}                     // 自增ID
         public string OrderID { get; set; }          // 订单编号（主键）
 
