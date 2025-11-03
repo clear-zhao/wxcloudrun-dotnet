@@ -226,7 +226,7 @@ namespace aspnetapp.Controllers
         /// <param name="newValue">新的字段值</param>
         /// <returns></returns>
         [HttpPatch("{id}/state")]
-        public async Task<IActionResult> UpdateOrderState(int id, [FromBody] string newValue)
+        public async Task<IActionResult> UpdateOrderState(string id, [FromBody] string newValue)
         {
             var order = await _context.Orders.FindAsync(id);
             if (order == null)
