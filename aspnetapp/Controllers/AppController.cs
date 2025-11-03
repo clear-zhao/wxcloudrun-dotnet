@@ -218,6 +218,30 @@ namespace aspnetapp.Controllers
 
             return CreatedAtAction(nameof(GetOrder), new { id = order.OrderID }, order);
         }
+
+        /// <summary>
+        /// 修改订单的某个字符串字段（例如 State）
+        /// </summary>
+        /// <param name="id">订单 ID</param>
+        /// <param name="newValue">新的字段值</param>
+        /// <returns></returns>
+        [HttpPatch("{id}/state")]
+        public async Task<IActionResult> UpdateOrderState(int id, [FromBody] string newValue)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound("未找到指定的订单。");
+            }
+        
+            order.State = newValue; // 假设 State 是 varchar 类型字段
+        
+            // 标记该字段已修改
+            _context.Entry(order).Property(o => o.State).IsModified = true;
+            await _context.SaveChangesAsync();
+        
+            return NoContent();
+        }
     }
 
     // 物料库的Controller
