@@ -162,7 +162,7 @@ namespace aspnetapp.Controllers
         [HttpGet("id/{id}")]
         public async Task<ActionResult<Order>> GetOrder(string id)
         {
-            var order = await _context.Orders.FindAsync(id);
+           var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
             {
