@@ -196,7 +196,7 @@ namespace aspnetapp.Controllers
         [HttpGet("ing")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersInProgress()
         {
-            var orders = await _context.Orders.Where(o => o.State == "处理中").ToListAsync();
+            var orders = await _context.Orders.Where(o => o.State == "进行中").ToListAsync();
 
             // if (orders == null || orders.Count == 0)
             // {
