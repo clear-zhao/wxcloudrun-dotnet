@@ -13,7 +13,7 @@ namespace aspnetapp
         public string DZ2Value { get; set; }         // 端子2测试值
         public string DZ3Value { get; set; }         // 端子3测试值
 
-        public DateTimeOffset?  Date { get; set; }           // 日期
+        public DateTime?  Date { get; set; }           // 日期
 
         public bool DZ1Check { get; set; }           // 端子1检验结果
         public bool DZ2Check { get; set; }           // 端子2检验结果
