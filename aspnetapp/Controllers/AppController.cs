@@ -160,7 +160,7 @@ namespace aspnetapp.Controllers
 
         // GET: api/orders/5
         [HttpGet("id/{id}")]
-        public async Task<ActionResult<Order>> GetOrder(int id)
+        public async Task<ActionResult<Order>> GetOrder(string id)
         {
             var order = await _context.Orders.FindAsync(id);
 
