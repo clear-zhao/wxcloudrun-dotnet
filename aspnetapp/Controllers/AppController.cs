@@ -183,10 +183,7 @@ namespace aspnetapp.Controllers
         {
             var orders = await _context.Orders.Where(o => o.Worker == workerName).ToListAsync();
 
-            if (orders == null || orders.Count == 0)
-            {
-                return NotFound();
-            }
+            
 
             return orders;
         }
@@ -201,10 +198,10 @@ namespace aspnetapp.Controllers
         {
             var orders = await _context.Orders.Where(o => o.State == "处理中").ToListAsync();
 
-            if (orders == null || orders.Count == 0)
-            {
-                return NotFound();
-            }
+            // if (orders == null || orders.Count == 0)
+            // {
+            //     return NotFound();
+            // }
 
             return orders;
         }
@@ -317,8 +314,8 @@ namespace aspnetapp.Controllers
                 .Where(t => t.OrderID == orderId)
                 .ToListAsync();
         
-            if (items == null || items.Count == 0)
-                return NotFound();
+            // if (items == null || items.Count == 0)
+            //     return NotFound();
         
             return Ok(items);
         }
